@@ -5,7 +5,7 @@
 
 # --- Configuration ---
 REMOTE_USER="root"
-REMOTE_HOST="pve-nuc" # 또는 IP 주소로 변경 가능
+REMOTE_HOST="pve-nuc"
 REMOTE_PATH="/opt/excalidraw"
 # ---------------------
 
@@ -15,6 +15,13 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
+
+# Check for cleanup flag
+CLEAN_FLAG=""
+if [[ "$1" == "--clean" ]]; then
+  echo -e "${YELLOW}Warning: Full cleanup requested. This will remove existing containers and volumes on the server.${NC}"
+  CLEAN_FLAG="--clean"
+fi
 
 echo -e "${BLUE}Step 1: Updating local source code...${NC}"
 git pull
@@ -26,7 +33,6 @@ echo -e "${BLUE}Step 3: Building application locally...${NC}"
 yarn build:app
 
 echo -e "${BLUE}Step 4: Syncing files to Proxmox ($REMOTE_HOST)...${NC}"
-# .git, node_modules 등 불필요한 파일 제외하고 전송
 rsync -avz --delete \
   --exclude '.git' \
   --exclude 'node_modules' \
@@ -41,7 +47,7 @@ else
 fi
 
 echo -e "${BLUE}Step 5: Restarting Docker containers on remote server...${NC}"
-ssh $REMOTE_USER@$REMOTE_HOST "cd $REMOTE_PATH && chmod +x run-prod.sh && ./run-prod.sh"
+ssh $REMOTE_USER@$REMOTE_HOST "cd $REMOTE_PATH && chmod +x run-prod.sh && ./run-prod.sh $CLEAN_FLAG"
 
 if [ $? -eq 0 ]; then
   echo -e "${GREEN}Deployment Successful!${NC}"
