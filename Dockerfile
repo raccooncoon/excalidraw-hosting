@@ -8,7 +8,9 @@ COPY . .
 
 # do not ignore optional dependencies:
 # Error: Cannot find module @rollup/rollup-linux-x64-gnu
-RUN npm_config_target_arch=${TARGETARCH} yarn --network-timeout 600000
+# Limit network concurrency to prevent ENOTCONN errors
+RUN yarn config set network-concurrency 1 && \
+    npm_config_target_arch=${TARGETARCH} yarn --network-timeout 600000
 
 ARG NODE_ENV=production
 ARG VITE_APP_WS_SERVER_URL
