@@ -17,8 +17,8 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}Step 1: Updating local source code...${NC}"
-git pull
+echo -e "${BLUE}Step 1: Skipping remote update (using local fixes)...${NC}"
+# git pull
 
 echo -e "${BLUE}Step 2: Installing dependencies locally...${NC}"
 yarn install --network-timeout 600000
