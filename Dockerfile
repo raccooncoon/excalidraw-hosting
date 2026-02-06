@@ -8,8 +8,10 @@ COPY . .
 
 # do not ignore optional dependencies:
 # Error: Cannot find module @rollup/rollup-linux-x64-gnu
-# Limit network concurrency to prevent ENOTCONN errors
+# Limit concurrency and disable husky to prevent ENOTCONN / socket errors
 RUN yarn config set network-concurrency 1 && \
+    yarn config set child-concurrency 1 && \
+    export HUSKY=0 && \
     npm_config_target_arch=${TARGETARCH} yarn --network-timeout 600000
 
 ARG NODE_ENV=production
