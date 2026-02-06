@@ -12,14 +12,6 @@ NC='\033[0m' # No Color
 
 echo -e "${BLUE}Starting Excalidraw Production Stack on Remote Server...${NC}"
 
-# Check for cleanup flag
-if [[ "$1" == "--clean" ]]; then
-  echo -e "${YELLOW}Performing full cleanup (stopping containers and removing volumes)...${NC}"
-  docker compose -f docker-compose.full.yml down -v --remove-orphans
-  # Optional: clear all unused docker data
-  # docker system prune -f
-fi
-
 # Check for .env.production.local
 if [ ! -f .env.production.local ]; then
   echo -e "${RED}Error: .env.production.local not found!${NC}"

@@ -16,13 +16,6 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# Check for cleanup flag
-CLEAN_FLAG=""
-if [[ "$1" == "--clean" ]]; then
-  echo -e "${YELLOW}Warning: Full cleanup requested. This will remove existing containers and volumes on the server.${NC}"
-  CLEAN_FLAG="--clean"
-fi
-
 echo -e "${BLUE}Step 1: Updating local source code...${NC}"
 git pull
 
@@ -47,7 +40,7 @@ else
 fi
 
 echo -e "${BLUE}Step 5: Restarting Docker containers on remote server...${NC}"
-ssh $REMOTE_USER@$REMOTE_HOST "cd $REMOTE_PATH && chmod +x run-prod.sh && ./run-prod.sh $CLEAN_FLAG"
+ssh $REMOTE_USER@$REMOTE_HOST "cd $REMOTE_PATH && chmod +x run-prod.sh && ./run-prod.sh"
 
 if [ $? -eq 0 ]; then
   echo -e "${GREEN}Deployment Successful!${NC}"
