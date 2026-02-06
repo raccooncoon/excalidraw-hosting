@@ -1,6 +1,9 @@
-FROM --platform=${BUILDPLATFORM} node:20 AS build
+FROM --platform=${BUILDPLATFORM} node:20-alpine AS build
 
 ARG TARGETARCH
+
+# Install build dependencies for Alpine
+RUN apk add --no-cache python3 make g++ git
 
 WORKDIR /opt/node_app
 
@@ -12,7 +15,7 @@ COPY . .
 RUN yarn config set network-concurrency 1 && \
     yarn config set child-concurrency 1 && \
     export HUSKY=0 && \
-    npm_config_target_arch=${TARGETARCH} yarn --network-timeout 600000
+    npm_config_target_arch=${TARGETARCH} yarn install --network-timeout 600000
 
 ARG NODE_ENV=production
 ARG VITE_APP_WS_SERVER_URL
