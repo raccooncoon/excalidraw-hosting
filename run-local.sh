@@ -10,6 +10,9 @@ NC='\033[0m' # No Color
 
 echo -e "${BLUE}Starting Excalidraw Local Stack...${NC}"
 
+echo -e "${BLUE}Updating source code from Git...${NC}"
+git pull
+
 # Check if .env.local exists, if so use it
 if [ -f .env.local ]; then
   echo -e "${GREEN}Using .env.local for environment variables.${NC}"
