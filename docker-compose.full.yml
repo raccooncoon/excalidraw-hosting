@@ -1,6 +1,6 @@
 services:
   gateway:
-    image: nginx:alpine
+    image: nginx:latest
     container_name: excalidraw-gateway
     ports:
       - "80:80"
